@@ -1,5 +1,5 @@
-import * as plotly from 'plotly.js';
-import * as React from 'react';
+import * as plotly from "plotly.js";
+import * as React from "react";
 
 export interface IPlotlyChartProps {
   config?: any;
@@ -29,7 +29,7 @@ export interface IPlotlyChartProps {
   onSelecting?: (event: plotly.PlotSelectionEvent) => void;
   onSliderChange?: (event: plotly.SliderChangeEvent) => void;
   onSliderEnd?: (event: plotly.SliderEndEvent) => void;
-  onSliderStart?: (event: plotly.SliderEndEvent) => void;
+  onSliderStart?: (event: plotly.SliderStartEvent) => void;
   onTransitioning?: () => void;
   onTransitionInterrupted?: () => void;
   onUnHover?: (event: plotly.PlotMouseEvent) => void;
@@ -116,6 +116,10 @@ class PlotlyChart extends React.Component<IPlotlyChartProps, any> {
         this.container!.removeAllListeners("plotly_redraw");
       this.container!.on('plotly_redraw', this.props.onRedraw);
     }
+    if (this.props.onSelected) {
+          this.container!.removeAllListeners("plotly_selected");
+          this.container!.on('plotly_selected', this.props.onSelected);
+      }
     if (this.props.onSelecting) {
         this.container!.removeAllListeners("plotly_selecting");
       this.container!.on('plotly_selecting', this.props.onSelecting);
@@ -166,8 +170,8 @@ class PlotlyChart extends React.Component<IPlotlyChartProps, any> {
     }
   };
 
-  public componentWillReceiveProps(nextProps: IPlotlyChartProps) {
-    this.draw(nextProps);
+  public componentDidUpdate(prevProps: IPlotlyChartProps) {
+    this.draw(this.props);
   }
 
   public componentDidMount() {

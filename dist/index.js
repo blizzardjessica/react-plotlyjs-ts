@@ -179,6 +179,10 @@ var PlotlyChart = /** @class */ (function (_super) {
             this.container.removeAllListeners("plotly_redraw");
             this.container.on('plotly_redraw', this.props.onRedraw);
         }
+        if (this.props.onSelected) {
+            this.container.removeAllListeners("plotly_selected");
+            this.container.on('plotly_selected', this.props.onSelected);
+        }
         if (this.props.onSelecting) {
             this.container.removeAllListeners("plotly_selecting");
             this.container.on('plotly_selecting', this.props.onSelecting);
@@ -213,8 +217,8 @@ var PlotlyChart = /** @class */ (function (_super) {
         }
         window.addEventListener('resize', this.resize);
     };
-    PlotlyChart.prototype.componentWillReceiveProps = function (nextProps) {
-        this.draw(nextProps);
+    PlotlyChart.prototype.componentDidUpdate = function (prevProps) {
+        this.draw(this.props);
     };
     PlotlyChart.prototype.componentDidMount = function () {
         this.draw(this.props);
